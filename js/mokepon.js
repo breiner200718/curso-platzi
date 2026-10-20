@@ -1,20 +1,16 @@
-// URL DEL SERVIDOR (AUTOMÁTICA SEGÚN ENTORNO)
 const SERVIDOR_URL = window.location.protocol.startsWith("http")
     ? window.location.origin
     : "http://localhost:8080";
 
-// SECCIONES DEL DOM
 const sectionSeleccionarMascota = document.getElementById("seleccionar-mascota");
 const sectionVerMapa = document.getElementById("ver-mapa");
 const sectionSeleccionarAtaque = document.getElementById("seleccionar-ataque");
 const sectionMensajes = document.getElementById("mensajes");
 const sectionReiniciar = document.getElementById("reiniciar");
 
-// BOTONES
 const botonMascotaJugador = document.getElementById("boton-mascota");
 const botonReiniciar = document.getElementById("boton-reiniciar");
 
-// ELEMENTOS DE TEXTO Y CONTENEDORES
 const spanMascotaJugador = document.getElementById("mascota-jugador");
 const spanMascotaEnemigo = document.getElementById("mascota-enemigo");
 const spanVidasJugador = document.getElementById("vidas-jugador");
@@ -25,11 +21,9 @@ const resultadoCombate = document.getElementById("resultado-combate");
 const contenedorTarjetas = document.getElementById("contenedorTarjetas");
 const contenedorAtaques = document.getElementById("contenedorAtaques");
 
-// CANVAS Y MAPA
 const mapa = document.getElementById("mapa");
 const lienzo = mapa.getContext("2d");
 
-// VARIABLES DEL JUEGO
 let jugadorId = null;
 let enemigoId = null;
 let mokepones = [];
@@ -50,7 +44,6 @@ let juegoTerminado = false;
 let intervalo = null;
 let intervaloAtaques = null;
 
-// TAMAÑO DEL MAPA (RESPONSIVO MANTENIENDO RELACIÓN 5:3)
 const anchoMaximoMapa = 500;
 let anchoDelMapa = window.innerWidth - 40;
 if (anchoDelMapa > anchoMaximoMapa) {
@@ -64,7 +57,6 @@ const altoDelMapa = (anchoDelMapa * 3) / 5;
 mapa.width = anchoDelMapa;
 mapa.height = altoDelMapa;
 
-// CLASE MOKEPON (CURSO PLATZI 2022)
 class Mokepon {
     constructor(nombre, foto, vida, fotoMapa = null, id = null) {
         this.id = id;
@@ -92,14 +84,12 @@ class Mokepon {
                 this.alto
             );
         } else {
-            // Fondo de respaldo visible si la imagen demora en cargar
             lienzo.fillStyle = "#FFB000";
             lienzo.fillRect(this.x, this.y, this.ancho, this.alto);
         }
     }
 }
 
-// CREACIÓN DE LAS MASCOTAS DEL JUGADOR
 const hipodoge = new Mokepon(
     "Hipodoge",
     "./assets/Blastoise Pixel Png - Blastoise Pokemon Rojo Fuego, Transparent Png , Transparent Png Image - PNGitem.jpg",
@@ -118,7 +108,6 @@ const ratigueya = new Mokepon(
     5
 );
 
-// LISTA DE ATAQUES DE CADA MOKEPON
 const HIPODOGE_ATAQUES = [
     { nombre: "AGUA 💧", id: "boton-agua" },
     { nombre: "AGUA 💧", id: "boton-agua" },
@@ -149,13 +138,11 @@ ratigueya.ataques.push(...RATIGUEYA_ATAQUES);
 
 mokepones.push(hipodoge, capipepo, ratigueya);
 
-// INICIALIZACIÓN DEL JUEGO
 function iniciarJuego() {
     sectionVerMapa.style.display = "none";
     sectionSeleccionarAtaque.style.display = "none";
     sectionReiniciar.style.display = "none";
 
-    // Generar tarjetas de Mokepones dinámicamente
     mokepones.forEach((mokepon) => {
         const opcionDeMokepones = `
             <input
@@ -178,27 +165,21 @@ function iniciarJuego() {
     botonMascotaJugador.addEventListener("click", seleccionarMascotaJugador);
     botonReiniciar.addEventListener("click", reiniciarJuego);
 
-    // Conectar al backend si el servidor está encendido
     unirseAlJuego();
 }
 
-// CONEXIÓN CON EL SERVIDOR NODE.JS (CLASES 67-84)
 function unirseAlJuego() {
     fetch(`${SERVIDOR_URL}/unirse`)
         .then(function (res) {
             if (res.ok) {
                 res.text().then(function (respuesta) {
                     jugadorId = respuesta;
-                    console.log("Conectado al servidor multijugador. ID:", jugadorId);
                 });
             }
         })
-        .catch(function () {
-            console.log("Servidor backend no detectado. Jugando en modo local contra la IA.");
-        });
+        .catch(function () {});
 }
 
-// SELECCIONAR MASCOTA DEL JUGADOR
 function seleccionarMascotaJugador() {
     const inputHipodoge = document.getElementById("Hipodoge");
     const inputCapipepo = document.getElementById("Capipepo");
@@ -217,10 +198,8 @@ function seleccionarMascotaJugador() {
 
     spanMascotaJugador.innerHTML = mascotaJugador;
 
-    // Enviar elección al servidor si está disponible
     seleccionarMokeponServidor(mascotaJugador);
 
-    // Ocultar selección y abrir mapa
     sectionSeleccionarMascota.style.display = "none";
     sectionVerMapa.style.display = "flex";
 
@@ -238,12 +217,10 @@ function seleccionarMokeponServidor(nombreMascota) {
         body: JSON.stringify({
             mokepon: nombreMascota
         })
-    }).catch((err) => console.log("Error al enviar mascota al servidor:", err));
+    }).catch(() => {});
 }
 
-// INICIALIZACIÓN DEL MAPA Y CONTROLES
 function iniciarMapa() {
-    // Obtener objeto de la mascota seleccionada
     mokepones.forEach((m) => {
         if (m.nombre === mascotaJugador) {
             mascotaJugadorObjeto = new Mokepon(m.nombre, m.foto, m.vida, m.foto);
@@ -253,18 +230,14 @@ function iniciarMapa() {
     mascotaJugadorObjeto.x = 20;
     mascotaJugadorObjeto.y = 20;
 
-    // Inicializar enemigos locales para juego offline o solitario
     crearEnemigosLocales();
 
-    // Eventos de teclado
     window.addEventListener("keydown", sePresionoUnaTecla);
     window.addEventListener("keyup", detenerMovimiento);
 
-    // Loop de renderizado a 20 FPS (50ms) según la clase de Platzi
     intervalo = setInterval(pintarCanvas, 50);
 }
 
-// CREACIÓN DE ENEMIGOS LOCALES (FALLBACK / MODO LOCAL)
 function crearEnemigosLocales() {
     mokeponesEnemigos = [
         new Mokepon("Hipodoge", hipodoge.foto, 5, hipodoge.foto, "local-hipodoge"),
@@ -272,7 +245,6 @@ function crearEnemigosLocales() {
         new Mokepon("Ratigueya", ratigueya.foto, 5, ratigueya.foto, "local-ratigueya")
     ];
 
-    // Asignar posiciones separadas en el mapa
     mokeponesEnemigos[0].x = Math.max(120, mapa.width - 80);
     mokeponesEnemigos[0].y = 25;
 
@@ -283,13 +255,10 @@ function crearEnemigosLocales() {
     mokeponesEnemigos[2].y = Math.floor(mapa.height / 2);
 }
 
-// DIBUJAR FONDO RETRO DEL MAPA
 function dibujarFondoMapa() {
-    // Césped
     lienzo.fillStyle = "#8BCB78";
     lienzo.fillRect(0, 0, mapa.width, mapa.height);
 
-    // Textura de cuadrícula retro suave
     lienzo.strokeStyle = "rgba(105, 175, 85, 0.45)";
     lienzo.lineWidth = 1;
     const pasoCuadricula = 40;
@@ -306,18 +275,15 @@ function dibujarFondoMapa() {
         lienzo.stroke();
     }
 
-    // Camino de arena central horizontal
     const altoCamino = Math.min(50, mapa.height * 0.22);
     const posYCamino = (mapa.height - altoCamino) / 2;
     lienzo.fillStyle = "#E8D8A6";
     lienzo.fillRect(0, posYCamino, mapa.width, altoCamino);
 
-    // Bordes del camino
     lienzo.fillStyle = "#C8B582";
     lienzo.fillRect(0, posYCamino, mapa.width, 3);
     lienzo.fillRect(0, posYCamino + altoCamino - 3, mapa.width, 3);
 
-    // Decoración de zona de batalla central
     lienzo.fillStyle = "rgba(255, 255, 255, 0.25)";
     lienzo.beginPath();
     lienzo.arc(mapa.width / 2, mapa.height / 2, 45, 0, Math.PI * 2);
@@ -327,13 +293,10 @@ function dibujarFondoMapa() {
     lienzo.stroke();
 }
 
-// LOOP PRINCIPAL DEL CANVAS
 function pintarCanvas() {
-    // Actualizar coordenadas del jugador con velocidad
     mascotaJugadorObjeto.x += mascotaJugadorObjeto.velocidadX;
     mascotaJugadorObjeto.y += mascotaJugadorObjeto.velocidadY;
 
-    // Evitar que el jugador salga de los bordes del mapa
     if (mascotaJugadorObjeto.x < 0) {
         mascotaJugadorObjeto.x = 0;
     }
@@ -347,19 +310,15 @@ function pintarCanvas() {
         mascotaJugadorObjeto.y = mapa.height - mascotaJugadorObjeto.alto;
     }
 
-    // Limpiar y redibujar escenario
     lienzo.clearRect(0, 0, mapa.width, mapa.height);
     dibujarFondoMapa();
 
-    // Pintar la mascota del jugador
     mascotaJugadorObjeto.pintarMokepon();
 
-    // Enviar posición al servidor si hay multijugador activo
     if (jugadorId) {
         enviarPosicion(mascotaJugadorObjeto.x, mascotaJugadorObjeto.y);
     }
 
-    // Pintar enemigos y verificar colisiones
     mokeponesEnemigos.forEach((enemigo) => {
         if (enemigo !== undefined && enemigo !== null) {
             enemigo.pintarMokepon();
@@ -368,7 +327,6 @@ function pintarCanvas() {
     });
 }
 
-// SINCRONIZACIÓN DE POSICIÓN CON EL SERVIDOR
 function enviarPosicion(x, y) {
     fetch(`${SERVIDOR_URL}/mokepon/${jugadorId}/posicion`, {
         method: "post",
@@ -403,12 +361,9 @@ function enviarPosicion(x, y) {
                 });
             }
         })
-        .catch(function () {
-            // Si el servidor falla temporalmente, se mantienen los enemigos locales
-        });
+        .catch(function () {});
 }
 
-// MOVIMIENTO Y CONTROLES
 function moverArriba() {
     mascotaJugadorObjeto.velocidadY = -5;
 }
@@ -463,7 +418,6 @@ function sePresionoUnaTecla(evento) {
     }
 }
 
-// DETECCIÓN DE COLISIONES (ALGORITMO AABB DE PLATZI)
 function revisarColision(enemigo) {
     const arribaEnemigo = enemigo.y;
     const abajoEnemigo = enemigo.y + enemigo.alto;
@@ -481,24 +435,21 @@ function revisarColision(enemigo) {
         derechaMascota < izquierdaEnemigo ||
         izquierdaMascota > derechaEnemigo
     ) {
-        return; // No hay colisión
+        return;
     }
 
-    // ¡COLISIÓN DETECTADA!
     detenerMovimiento();
     clearInterval(intervalo);
 
     enemigoId = enemigo.id;
     mokeponEnemigo = enemigo;
 
-    // Transición de pantalla: ocultar mapa y abrir combate
     sectionVerMapa.style.display = "none";
     sectionSeleccionarAtaque.style.display = "block";
 
     iniciarCombate(enemigo);
 }
 
-// INICIAR COMBATE TRAS COLISIÓN
 function iniciarCombate(enemigo) {
     spanMascotaEnemigo.innerHTML = enemigo.nombre;
     spanVidasJugador.innerHTML = "0";
@@ -514,7 +465,6 @@ function iniciarCombate(enemigo) {
     victoriasEnemigo = 0;
     juegoTerminado = false;
 
-    // Asignar ataques del enemigo según su tipo
     if (enemigo.nombre === "Hipodoge") {
         ataquesMokeponEnemigo = HIPODOGE_ATAQUES;
     } else if (enemigo.nombre === "Capipepo") {
@@ -523,11 +473,9 @@ function iniciarCombate(enemigo) {
         ataquesMokeponEnemigo = RATIGUEYA_ATAQUES;
     }
 
-    // Extraer y mostrar ataques del jugador
     extraerAtaques(mascotaJugador);
 }
 
-// EXTRAER Y RENDERIZAR ATAQUES DEL JUGADOR
 function extraerAtaques(nombreMascota) {
     let ataques = [];
 
@@ -560,7 +508,6 @@ function mostrarAtaques(ataques) {
     secuenciaAtaque();
 }
 
-// SECUENCIA DE SELECCIÓN DE 5 ATAQUES
 function secuenciaAtaque() {
     botones.forEach((boton) => {
         boton.addEventListener("click", (e) => {
@@ -581,12 +528,10 @@ function secuenciaAtaque() {
             boton.style.background = "#112f58";
             boton.disabled = true;
 
-            // En modo local o cuando el enemigo no es un jugador remoto real
             if (!jugadorId || !enemigoId || enemigoId.toString().startsWith("local")) {
                 ataqueAleatorioEnemigo();
             }
 
-            // Si ya se eligieron los 5 ataques
             if (ataqueJugador.length === 5) {
                 if (jugadorId && enemigoId && !enemigoId.toString().startsWith("local")) {
                     enviarAtaquesServidor();
@@ -601,7 +546,6 @@ function secuenciaAtaque() {
     });
 }
 
-// ATAQUE ALEATORIO DEL ENEMIGO (MODO LOCAL)
 function ataqueAleatorioEnemigo() {
     if (ataquesMokeponEnemigo.length === 0) {
         ataquesMokeponEnemigo = HIPODOGE_ATAQUES;
@@ -619,7 +563,6 @@ function ataqueAleatorioEnemigo() {
     }
 }
 
-// MULTIJUGADOR: ENVIAR Y OBTENER ATAQUES
 function enviarAtaquesServidor() {
     fetch(`${SERVIDOR_URL}/mokepon/${jugadorId}/ataques`, {
         method: "post",
@@ -633,7 +576,6 @@ function enviarAtaquesServidor() {
         resultadoCombate.innerHTML = "Esperando los ataques de tu rival...";
         intervaloAtaques = setInterval(obtenerAtaquesServidor, 50);
     }).catch(() => {
-        // Fallback a ataques locales si la petición falla
         while (ataqueEnemigo.length < 5) {
             ataqueAleatorioEnemigo();
         }
@@ -663,14 +605,12 @@ function obtenerAtaquesServidor() {
         });
 }
 
-// EVALUAR COMBATE CUANDO AMBOS TIENEN 5 ATAQUES
 function iniciarPelea() {
     if (ataqueJugador.length === 5 && ataqueEnemigo.length === 5) {
         combate();
     }
 }
 
-// RESOLUCIÓN DE LAS 5 RONDAS
 function combate() {
     const resultados = [];
 
@@ -693,18 +633,14 @@ function combate() {
         }
     }
 
-    // Actualizar contadores de victorias
     spanVidasJugador.innerHTML = victoriasJugador;
     spanVidasEnemigo.innerHTML = victoriasEnemigo;
 
-    // Mostrar historial de ataques
     spanAtaqueJugador.innerHTML = ataqueJugador.join(" - ");
     spanAtaqueEnemigo.innerHTML = ataqueEnemigo.join(" - ");
 
-    // Mostrar resumen de rondas en el centro
     resultadoCombate.innerHTML = resultados.join("<br>");
 
-    // Aplicar estilos visuales al resultado central
     resultadoCombate.classList.remove("ganaste", "perdiste", "empate");
     if (victoriasJugador > victoriasEnemigo) {
         resultadoCombate.classList.add("ganaste");
@@ -714,11 +650,9 @@ function combate() {
         resultadoCombate.classList.add("empate");
     }
 
-    // Comprobar resultado final del combate
     revisarVidas();
 }
 
-// REVISAR RESULTADO FINAL
 function revisarVidas() {
     if (victoriasJugador > victoriasEnemigo) {
         crearMensajeFinal("¡FELICITACIONES! GANASTE EL COMBATE 🏆");
@@ -729,7 +663,6 @@ function revisarVidas() {
     }
 }
 
-// MENSAJE FINAL Y BOTÓN DE REINICIO
 function crearMensajeFinal(mensaje) {
     juegoTerminado = true;
 
@@ -746,15 +679,12 @@ function crearMensajeFinal(mensaje) {
     });
 }
 
-// REINICIAR
 function reiniciarJuego() {
     location.reload();
 }
 
-// NÚMERO ALEATORIO ENTRE MIN Y MAX (INCLUSIVO)
 function aleatorio(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-// INICIAR AL CARGAR LA PÁGINA
 window.addEventListener("load", iniciarJuego);
