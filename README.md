@@ -6,6 +6,19 @@ El juego combina selección dinámica de personajes, exploración de mapas en `<
 
 ---
 
+## 🎓 Certificado de Aprobación
+
+Este proyecto fue desarrollado y completado satisfactoriamente como parte del **Curso de Programación Básica** de **Platzi**.
+
+- 👤 **Estudiante:** Breiner Arteaga
+- 📜 **Diploma Oficial:** [Ver Certificación en Platzi](https://platzi.com/p/breinerarteaga54/curso/3208-programacion-basica-2022/diploma/detalle/)
+- 📄 **Copia en PDF:** [`./certificado/diploma-programacion-basica-platzi.pdf`](./certificado/diploma-programacion-basica-platzi.pdf)
+- 🔑 **Código de verificación:** `8a6b4a7b-e874-4564-b9e9-b7df65d1ac84`
+- ⏱️ **Carga horaria:** 29 horas de teoría y práctica
+- 📅 **Fecha:** 20 de Octubre de 2026
+
+---
+
 ## ✨ Características Principales
 
 - **Programación Orientada a Objetos (POO):** Modelado modular mediante la clase `Mokepon` (nombre, vidas, ataques, avatares, coordenadas y métodos de renderizado).
@@ -42,6 +55,8 @@ moquepon/
 │   ├── Blastoise Pixel Png...  # Avatar de Hipodoge
 │   ├── Serperior.jpg           # Avatar de Capipepo
 │   └── Charizard  Pixel Art.jpg# Avatar de Ratigueya
+├── certificado/                # Certificado oficial de aprobación
+│   └── diploma-programacion-basica-platzi.pdf
 ├── js/
 │   └── mokepon.js              # Lógica del cliente, Canvas, colisiones y combate
 ├── index.js                    # Servidor backend Node.js (Express + CORS)
