@@ -1,0 +1,20 @@
+{
+  "name": "mokepon",
+  "version": "1.0.0",
+  "description": "Juego Mokepon del Curso de Programación Básica de Platzi",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "mokepon",
+    "platzi",
+    "juego"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

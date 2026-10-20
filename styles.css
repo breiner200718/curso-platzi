@@ -1,0 +1,484 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+    font-family: 'Press Start 2P', cursive;
+
+    --White: rgba(255, 255, 255, 0.95);
+    --border-blur: solid 3px #FFFFFF;
+    --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+    --text: #FFFFFF;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 20px;
+
+    background: linear-gradient(
+        rgba(14, 25, 65, 0.45),
+        rgba(14, 25, 65, 0.65)
+    );
+
+    text-align: center;
+}
+/* TITULOS */
+
+.titulo {
+    color: #FFE347;
+    font-size: 2.5rem;
+    text-shadow: 4px 4px 0 #7A2600, 0 0 15px #FF8C00;
+    margin: 35px 0;
+}
+
+h2 {
+    color: #FFFFFF;
+    font-size: 1.3rem;
+    text-shadow: 3px 3px 0 #15264D;
+    padding: 15px;
+}
+
+/* MASCOTAS */
+
+.container-mascotas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.input {
+    display: none;
+}
+
+.label {
+    display: inline-block;
+    cursor: pointer;
+    color: #FFFFFF;
+}
+
+.imgPet {
+    width: 200px;
+    min-height: 160px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    background: #253B75;
+    border: 4px solid #FFFFFF;
+    border-radius: 18px;
+    box-shadow: var(--box-shadow);
+
+    color: #FFFFFF;
+    font-size: 3rem;
+    padding: 20px;
+
+    transition: transform 0.2s, background 0.2s;
+}
+
+.imgPet img {
+    width: 150px;
+    height: 130px;
+    object-fit: contain;
+    display: block;
+}
+
+.imgPet p {
+    font-size: 0.8rem;
+    margin: 5px 0;
+}
+
+.label:hover .imgPet {
+    transform: translateY(-5px);
+    background: #3558A8;
+}
+
+.input:checked + .label .imgPet {
+    background: #00A878;
+    border-color: #FFE347;
+    box-shadow: 0 0 0 4px #FFE347, 0 8px 25px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05);
+}
+
+/* BOTONES */
+
+.button {
+    background: #FFB000;
+    border: 3px solid #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 6px 0 #9B5700;
+
+    padding: 18px 25px;
+    margin: 20px 8px;
+
+    color: #252047;
+    font-family: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+
+    transition: transform 0.15s, background 0.15s;
+}
+
+.button:hover {
+    background: #FFE347;
+    transform: translateY(-3px);
+}
+
+.button:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #9B5700;
+}
+
+/* BOTONES DESACTIVADOS */
+
+.button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ATAQUES */
+
+.container-ataques {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.ataq {
+    min-width: 180px;
+    padding: 20px;
+    font-size: 0.85rem;
+}
+
+#boton-fuego {
+    background: #FF4545;
+    color: #FFFFFF;
+    box-shadow: 0 6px 0 #9B2020;
+}
+
+#boton-fuego:hover {
+    background: #FF7070;
+}
+
+#boton-agua {
+    background: #168CFF;
+    color: #FFFFFF;
+    box-shadow: 0 6px 0 #07529C;
+}
+
+#boton-agua:hover {
+    background: #54B4FF;
+}
+
+#boton-tierra {
+    background: #21A653;
+    color: #FFFFFF;
+    box-shadow: 0 6px 0 #11632F;
+}
+
+#boton-tierra:hover {
+    background: #4BD477;
+}
+
+/* TARJETAS Y VIDAS */
+
+.container-vidas {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.tarjetavida {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    background: #FFFFFF;
+    border: 4px solid #FFE347;
+    border-radius: 18px;
+    box-shadow: var(--box-shadow);
+
+    padding: 25px;
+    width: 300px;
+    min-height: 300px;
+
+    color: #202A44;
+}
+
+.tarjetavida p {
+    font-size: 0.7rem;
+    line-height: 1.8;
+}
+
+#jugador {
+    color: #087F5B;
+    font-size: 1rem;
+}
+
+#enemigo {
+    color: #C62828;
+    font-size: 1rem;
+}
+
+#vidas-jugador,
+#vidas-enemigo {
+    font-size: 3rem;
+    color: #FF8C00;
+    text-shadow: 2px 2px 0 #FFE347;
+}
+
+#mascota-jugador,
+#mascota-enemigo {
+    color: #253B75;
+    font-size: 0.8rem;
+    overflow-wrap: anywhere;
+}
+
+/* ATAQUES DENTRO DE LAS TARJETAS */
+
+#ataque-jugador,
+#ataque-enemigo {
+    display: block;
+    color: #253B75;
+    font-size: 0.8rem;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+    margin-top: 10px;
+}
+
+/* RESULTADO EN EL CENTRO */
+
+#resultado-combate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 240px;
+    min-height: 180px;
+    align-self: center;
+
+    background: #FFFFFF;
+    color: #253B75;
+
+    border: 4px solid #FFE347;
+    border-radius: 15px;
+    padding: 20px;
+
+    font-size: 0.9rem;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+
+    box-shadow: var(--box-shadow);
+}
+
+/* COLORES DEL RESULTADO */
+
+#resultado-combate.ganaste {
+    background: #B9FFD0;
+    color: #087F5B;
+    border-color: #21A653;
+}
+
+#resultado-combate.perdiste {
+    background: #FFD0D0;
+    color: #C62828;
+    border-color: #FF4545;
+}
+
+#resultado-combate.empate {
+    background: #FFF0B3;
+    color: #805500;
+    border-color: #FFB000;
+}
+
+/* MENSAJES FINALES */
+
+#mensajes,
+#mensajeFinal {
+    background: #FFFFFF;
+    border: 4px solid #FFE347;
+    border-radius: 15px;
+    box-shadow: var(--box-shadow);
+
+    color: #202A44;
+    font-size: 0.85rem;
+    line-height: 1.8;
+
+    width: 90%;
+    max-width: 750px;
+    margin: 25px auto;
+    padding: 25px;
+}
+
+/* REINICIAR */
+
+#boton-reiniciar,
+#button-restart {
+    background: #9B4DFF;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+    box-shadow: 0 6px 0 #57229B;
+}
+
+#boton-reiniciar:hover,
+#button-restart:hover {
+    background: #BB8AFF;
+}
+
+/* SECCIONES */
+
+#seleccionar-mascota,
+#seleccionar-ataque,
+#mensajes,
+#reiniciar {
+    margin-bottom: 35px;
+}
+
+/* CELULARES */
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .titulo {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 0.9rem;
+    }
+
+    .container-mascotas {
+        gap: 15px;
+    }
+
+    .imgPet {
+        width: 145px;
+        min-height: 130px;
+        font-size: 2.3rem;
+        padding: 12px;
+    }
+
+    .imgPet img {
+        width: 110px;
+        height: 100px;
+    }
+
+    .imgPet p {
+        font-size: 0.65rem;
+    }
+
+    .container-vidas {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .tarjetavida {
+        width: 100%;
+        max-width: 320px;
+        min-height: 280px;
+    }
+
+    #resultado-combate {
+        width: 100%;
+        max-width: 320px;
+        min-height: 120px;
+        font-size: 0.8rem;
+        order: 0;
+    }
+
+    .tarjetavida:first-child {
+        order: -1;
+    }
+
+    .tarjetavida:last-child {
+        order: 1;
+    }
+
+    .ataq {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    #mensajes,
+    #mensajeFinal {
+        width: 100%;
+        font-size: 0.7rem;
+    }
+}
+
+
+/* MAPA DEL JUEGO */
+
+#ver-mapa {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px auto;
+    width: 100%;
+}
+
+#mapa {
+    width: 500px;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 5 / 3;
+
+    background: #8BCB78;
+    border: 5px solid #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+@media (max-width: 600px) {
+    #mapa {
+        width: 100%;
+    }
+}
+
+/* CONTROLES DIRECCIONALES DEL MAPA */
+
+.contenedor-direcciones {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.fila-direcciones {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.boton-direccion {
+    min-width: 90px;
+    padding: 14px 18px;
+    margin: 0;
+    font-size: 0.75rem;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+
+
